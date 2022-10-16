@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
-  email: { type: String },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  password: { type: String, required: true },
   decks: [
     {
       type: Schema.Types.ObjectId,
@@ -13,6 +14,6 @@ const UserSchema = new Schema({
   ],
 });
 
-const User = mongoose.model('User', UserSchema)
+const User = mongoose.model("User", UserSchema);
 
-export default User
+export default User;

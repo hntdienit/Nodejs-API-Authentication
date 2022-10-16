@@ -1,6 +1,19 @@
 import User from "../models/User.js";
 import Deck from "../models/Deck.js";
-import joi from "@hapi/joi"
+import jwt from "jsonwebtoken";
+
+
+const endCode = (userID) => {
+  return jwt.sign(
+    {
+      iss: "ThanhDien",
+      sub: userID,
+      iat: new Date().setTime(),
+      exp: new Date().setDate(new Date().getDate() + 3),
+    },
+    process.env.JWT_SECRET
+  );
+};
 
 const getUser = async (req, res, next) => {
   const { id } = req.value.params;
@@ -39,6 +52,10 @@ const index = async (req, res, next) => {
   // } catch (err) {
   //   next(err);
   // }
+};
+
+const loginPost = async (req, res, next) => {
+  return res.status(200).json(req.value.body);
 };
 
 const newUser = async (req, res, next) => {
@@ -90,6 +107,27 @@ const replaceUser = async (req, res, next) => {
   return res.status(200).json({ user: result });
 };
 
+const registerPost = async (req, res, next) => {
+  const { firstName, lastName, email, password } = req.value.body;
+
+  const foundUser = await User.findOne({ email });
+  if (foundUser)
+    return res.status(403).json({ error: "email is already in use!" });
+
+  const newUser = new User({ firstName, lastName, email, password });
+  await newUser.save();
+
+  // endcode
+  const token = endCode(newUser._id);
+  res.setHeader("token", token)
+
+  return res.status(201).json({ newUser});
+};
+
+const sercet = async (req, res, next) => {
+  res.send("sercet");
+};
+
 const updateUser = async (req, res, next) => {
   const { id } = req.value.params;
   const newUser = req.value.body;
@@ -103,8 +141,11 @@ export default {
   getUser,
   getUserDecks,
   index,
+  loginPost,
   newUser,
   newUserDecks,
   replaceUser,
+  registerPost,
+  sercet,
   updateUser,
 };

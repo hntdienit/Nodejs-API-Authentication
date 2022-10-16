@@ -41,6 +41,11 @@ const schemas = {
       .required(),
   }),
 
+  login: joi.object().keys({
+    email: joi.string().email().required(),
+    password: joi.string().min(6).required(),
+  }),
+
   newDeck: joi.object().keys({
     name: joi.string().min(6).required(),
     description: joi.string().min(10).required(),
@@ -48,6 +53,13 @@ const schemas = {
       .string()
       .regex(/^[0-9a-fA-F]{24}$/)
       .required(),
+  }),
+
+  auth: joi.object().keys({
+    firstName: joi.string().min(2).required(),
+    lastName: joi.string().min(2).required(),
+    email: joi.string().email().required(),
+    password: joi.string().min(6).required(),
   }),
 
   user: joi.object().keys({

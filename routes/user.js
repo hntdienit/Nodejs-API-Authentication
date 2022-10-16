@@ -13,6 +13,16 @@ router
   .post(helper.validateBody(helper.schemas.user), UserController.newUser);
 
 router
+  .route("/register")
+  .post(helper.validateBody(helper.schemas.auth), UserController.registerPost);
+
+router
+  .route("/login")
+  .post(helper.validateBody(helper.schemas.login), UserController.loginPost);
+
+router.route("/secret").get(UserController.sercet);
+
+router
   .route("/:id")
   .get(helper.validateParam(helper.schemas.id, "id"), UserController.getUser)
   .put(

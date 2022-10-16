@@ -1,4 +1,5 @@
 import express from "express";
+import "dotenv/config";
 import logger from "morgan";
 import mongoose from "mongoose";
 import router from "./routes/index.js";
@@ -6,12 +7,12 @@ import helmet from "helmet";
 
 // connection mongodb
 mongoose
-  .connect("mongodb://localhost:27017")
+  .connect(process.env.MONGODB)
   .then(() => {
     console.log("✅ connection ✅");
   })
-  .catch((error) => {
-    console.log(`📢 not connection ${error}`);
+  .catch((err) => {
+    console.log(`📢 not connection ${err}`);
   });
 
 const app = express();
@@ -29,6 +30,6 @@ app.use(logger("dev")); /* when debug console.log */
 router(app);
 
 // start server
-app.listen(3009, () => {
-  console.log(`Server run port ${3009}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server run port ${process.env.PORT}`);
 });
