@@ -1,8 +1,10 @@
 import express from "express";
 import PromiseRouter from "express-promise-router";
+import passport from "passport";
 
 import UserController from "../controllers/user.js";
 import helper from "../helpers/routerHelpers.js";
+import "../middlewares/passport.js";
 
 // const router = express.Router();
 const router = PromiseRouter();
@@ -17,10 +19,30 @@ router
   .post(helper.validateBody(helper.schemas.auth), UserController.registerPost);
 
 router
-  .route("/login")
-  .post(helper.validateBody(helper.schemas.login), UserController.loginPost);
+  .route("/auth/google")
+  .post(
+    passport.authenticate("google-plus-token", { session: false }),
+    UserController.authGoogle
+  );
 
-router.route("/secret").get(UserController.sercet);
+router
+  .route("/auth/facebook")
+  .post(
+    passport.authenticate("facebook-token", { session: false }),
+    UserController.authFacebook
+  );
+
+router
+  .route("/login")
+  .post(
+    helper.validateBody(helper.schemas.login),
+    passport.authenticate("local", { session: false }),
+    UserController.loginPost
+  );
+
+router
+  .route("/secret")
+  .get(passport.authenticate("jwt", { session: false }), UserController.sercet);
 
 router
   .route("/:id")

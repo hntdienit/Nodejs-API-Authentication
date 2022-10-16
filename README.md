@@ -1,9 +1,16 @@
 # Code back end Nodejs-API-Authentication
 
 # Getting Started
-    # Step 1: npm i
-    # Step 2: adjust mongodb connection accordingly
-    # Step 3: npm start
-    # Step 4: localhost:3009
+# Step 1: install node_modules
+    npm i
+# Step 2: config file .env
+    rename file .evn.example -> .env
+    change the configuration accordingly your in file .env
+# Step 3: run server
+    npm start
+# Step 4: access link
+    http://localhost:3009
 
-# (attention) -> Should use postman to try because there is no front end
+# (Attention) -> Should try using postman because there is no front end support
+
+# Wish success! -- Thanks for your watching!

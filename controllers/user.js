@@ -2,7 +2,6 @@ import User from "../models/User.js";
 import Deck from "../models/Deck.js";
 import jwt from "jsonwebtoken";
 
-
 const endCode = (userID) => {
   return jwt.sign(
     {
@@ -13,6 +12,18 @@ const endCode = (userID) => {
     },
     process.env.JWT_SECRET
   );
+};
+
+const authFacebook = async (req, res, next) => {
+  const token = endCode(req.user._id);
+  res.setHeader("Authorization", token);
+  return res.status(200).json({ Authorization: true });
+};
+
+const authGoogle = async (req, res, next) => {
+  const token = endCode(req.user._id);
+  res.setHeader("Authorization", token);
+  return res.status(200).json({ Authorization: true });
 };
 
 const getUser = async (req, res, next) => {
@@ -55,7 +66,9 @@ const index = async (req, res, next) => {
 };
 
 const loginPost = async (req, res, next) => {
-  return res.status(200).json(req.value.body);
+  const token = endCode(req.user._id);
+  res.setHeader("Authorization", token);
+  return res.status(200).json({ Authorization: true });
 };
 
 const newUser = async (req, res, next) => {
@@ -119,13 +132,13 @@ const registerPost = async (req, res, next) => {
 
   // endcode
   const token = endCode(newUser._id);
-  res.setHeader("token", token)
+  res.setHeader("token", token);
 
-  return res.status(201).json({ newUser});
+  return res.status(201).json({ newUser });
 };
 
 const sercet = async (req, res, next) => {
-  res.send("sercet");
+  return res.status(200).json({ resources: true });
 };
 
 const updateUser = async (req, res, next) => {
@@ -138,6 +151,8 @@ const updateUser = async (req, res, next) => {
 };
 
 export default {
+  authFacebook,
+  authGoogle,
   getUser,
   getUserDecks,
   index,
